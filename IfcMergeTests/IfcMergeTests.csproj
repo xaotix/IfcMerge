@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IfcMerge\IfcMerge.csproj" />
+    <ProjectReference Include="..\IfcMerge\DLM.IFC.Merge.csproj" />
   </ItemGroup>
 
   <ItemGroup>

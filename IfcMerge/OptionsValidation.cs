@@ -11,20 +11,23 @@ namespace IfcMerge
         {
             if (options == null)
                 return false;
-            if (!options.InputFiles.Any())
+            if (options.InputFolder.Length == 0)
             {
                 return false;
             }
-            
-            foreach (var file in options.InputFiles)
+            if (options.OutputFile.Length == 0)
             {
-                var exist = File.Exists(file);
-                if (!exist)
-                {
-                    Console.WriteLine($"Input file '{file}' not found.");
-                    return false;
-                }
+                options.OutputFile = @$"{options.InputFolder}\ARQUIVO_FINAL_UNIDO{DateTime.Now.ToShortDateString().Replace("/","-")}.IFC";
             }
+            //foreach (var file in options.InputFiles)
+            //{
+            //    var exist = File.Exists(file);
+            //    if (!exist)
+            //    {
+            //        Console.WriteLine($"Input file '{file}' not found.");
+            //        return false;
+            //    }
+            //}
             return true;
         }
     }

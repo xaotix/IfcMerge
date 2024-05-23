@@ -6,10 +6,10 @@ namespace IfcMerge
 {
     public partial class Options
     {
-        [Option('i', "InputFile", Required = true, HelpText = "Any number of valid IFC models or a file containing their names. If the inputfile has txt extension each line will be parsed as a single source file to merge.", Min = 1)]
-        public IEnumerable<string> InputFiles { get; set; } = Enumerable.Empty<string>();
+        [Option('i', "InputFile", Required = true, HelpText = "Pasta de origem onde estão os arquivos IFC.")]
+        public string InputFolder { get; set; } = "";
 
-        [Option('o', "OutputFile", Required = true, HelpText = "The IFC File to output, the extension chosen determines the format (e.g. ifczip).")]
+        [Option('o', "OutputFile", Required = false, HelpText = "Nome do arquivo de destino. Não deve estar na mesma pasta.")]
         public string OutputFile { get; set; } = "";
 
         [Option("RetainOwner", HelpText = "retains OwnerHistory ifnormation from the original file, where possible.")]

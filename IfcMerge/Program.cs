@@ -32,13 +32,13 @@ namespace IfcMerge
 
         static void Run(Options opts)
         {
-            Console.WriteLine($"IfcMerge version {AsmblyVer}");
+            Console.WriteLine($"DLM.IFC.Merge V.{AsmblyVer}");
             var valid = opts.Validate();
             if (!valid)
                 return;
 
             var builder = new IfcMerger(opts);
-            foreach (var inFile in opts.InputFiles)
+            foreach (var inFile in Directory.GetFiles(opts.InputFolder))
             {
                 if (File.Exists(inFile))
                 {
@@ -46,31 +46,36 @@ namespace IfcMerge
 
                     if (f.Extension.ToLowerInvariant() == ".txt")
                     {
-                        Console.WriteLine($"Opening list File: ${inFile}");
+                        Console.WriteLine($"Mapeando arquivos da pasta: ${inFile}");
                         var allLines = File.ReadAllLines(inFile);
                         foreach (var line in allLines)
                         {
                             if (string.IsNullOrEmpty(line))
                                 continue;
-                            Console.WriteLine($"- Opening ifc File: ${line}");
+                            Console.WriteLine($"- Carregando arquivo: ${line}");
                             var fi = new FileInfo(line);
                             builder.MergeFile(fi);
                         }
                     }
+                    else if (f.Extension.ToLowerInvariant() == ".ifc")
+                    {
+                        Console.WriteLine($"Carregando ifc: ${inFile}");
+                        builder.MergeFile(f);
+                    }
                     else
                     {
-                        Console.WriteLine($"Opening ifc File: ${inFile}");
-                        builder.MergeFile(f);
+                        Console.WriteLine($"Arquivo inválido: ${inFile}");
                     }
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Failed to open file {inFile}");
+                    Console.Error.WriteLine($"Falha ao tentar abrir o arquivo {inFile}");
                 }
+
             }
-            Console.WriteLine($"{builder.processed} files merged. Creating IFC...");
+            Console.WriteLine($"{builder.processed} arquivos unidos. Criando IFC...");
             var file = builder.SaveIfcModel();
-            Console.WriteLine($"Created IFC File {file.FullName}");
+            Console.WriteLine($"Criando arquivo IFC... {file.FullName}");
         }
 
         static void HandleParseError(IEnumerable<Error> errs)
@@ -86,11 +91,11 @@ namespace IfcMerge
                         break;
 
                     case MissingRequiredOptionError missing:
-                        Console.WriteLine($"Missing required input: --{missing.NameInfo.LongName}");
+                        Console.WriteLine($"Faltando dados mínimos para rodar, input: --{missing.NameInfo.LongName}");
                         break;
 
                     case MissingValueOptionError missing:
-                        Console.WriteLine($"Missing value for input: --{missing.NameInfo.LongName}");
+                        Console.WriteLine($"Faltando dados mínimos para rodar, input: --{missing.NameInfo.LongName}");
                         break;
 
 
